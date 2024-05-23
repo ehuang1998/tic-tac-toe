@@ -1,0 +1,39 @@
+* {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.gameboard-container {
+    display: flex;
+    justify-content: center;
+}
+
+#gameboard {
+    width: 50vmin;
+    height: 50vmin;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.square {
+    display: flex;
+    flex-wrap: wrap;
+    float: left;
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 80px;
+}
+
+#controls {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    
+}
