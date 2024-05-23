@@ -1,3 +1,5 @@
+let gameOver;
+
 const displayController = (() => {
     const renderMessage = (message) => {
         document.querySelector("#message").innerHTML = message;
@@ -21,10 +23,12 @@ const Gameboard = (() => {
 
         document.querySelector("#gameboard").innerHTML = boardHTML;
 
-        const squares = document.querySelectorAll(".square");
-        squares.forEach((square) => {
-            square.addEventListener('click', Game.handleClick);
-        })
+        if(gameOver==false) {
+            const squares = document.querySelectorAll(".square");
+            squares.forEach((square) => {
+                square.addEventListener('click', Game.handleClick);
+            })
+        }
     }
 
     //update mark function
@@ -56,7 +60,6 @@ const Game = (() => {
 
     let players = [];
     let currentPlayerIndex;
-    let gameOver;
 
     //start game function
     const start = () => {
@@ -77,24 +80,26 @@ const Game = (() => {
     //handle click function
     const handleClick = (event) => {
         let index = parseInt(event.target.id.split("-")[1]);
-        if(Gameboard.getGameboard()[index]  !== "") 
+        if(Gameboard.getGameboard()[index]  !== "") //does not allow to choose a block already taken 
             return;
 
-        Gameboard.update(index, players[currentPlayerIndex].mark);
+        if(gameOver==false) {
+            Gameboard.update(index, players[currentPlayerIndex].mark);
 
-        if(checkForWin(Gameboard.getGameboard())) {
-            gameOver = true;
-            displayController.renderMessage(`${players[currentPlayerIndex].name} won!`);
-            
+            if(checkForWin(Gameboard.getGameboard())) {
+                gameOver = true;
+                displayController.renderMessage(`${players[currentPlayerIndex].name} won!`);
+                
+            }
+
+            else if (checkForTie(Gameboard.getGameboard())) {
+                gameOver = true;
+                displayController.renderMessage(`It's a Tie!`);
+            }
+
+            currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0; //ternary operator to switch between x and o
         }
-
-        else if (checkForTie(Gameboard.getGameboard())) {
-            gameOver = true;
-            displayController.renderMessage(`It's a Tie!`);
-        }
-
-        currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0; //ternary operator to switch between x and o
-
+    
         if (gameOver) {
             return;
         }
@@ -105,15 +110,15 @@ const Game = (() => {
         for (let i = 0; i < 9; i++) {
             Gameboard.update(i, "");
         }
-        Gameboard.render();
         gameOver = false;
+        Gameboard.render();
         displayController.renderMessage(``);
     }
 
     return {
         start,
         handleClick,
-        restart
+        restart,
     }
 
 })();
