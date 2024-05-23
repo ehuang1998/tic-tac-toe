@@ -37,3 +37,10 @@ h1 {
     padding-top: 20px;
     
 }
+
+#message {
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    font-weight: bold;
+}
